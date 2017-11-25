@@ -43,6 +43,8 @@ Package Structure
   (ii)create default table user_details under ticketsecuritydb schema
   (iii)In that table it will automatically create as user "master" and password as "admin"
        and role assigned to user as "ROLE_ADMIN".
+  ****NOTE:: Once the Applicatin has been started need to comment the SQL script file in Resource Folder
+             when restarting the application!!!!     
    
    APIs
    ======
