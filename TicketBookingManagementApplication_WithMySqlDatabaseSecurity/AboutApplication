@@ -1,0 +1,124 @@
+                                                           About Application
+                                                        ======================
+**This application is to demonstrate the security providing in Spring Boot application.    
+Package Structure
+------------------
+==> Parent Package Structure: com.reactiveworks.learning :: Contains the Main Class(Starting point for the Application)
+     Hierarchy level of package
+     --------------------------
+      1)com.reactiveworks.learning.entity --->It contains the entity class(Here Ticket and UserInfo)
+      2)Next one is com.reactiveworks.learning.service --->It is the Service layer which contains two interfaces
+                                                           ITicketService and IUserService where for every methods
+                                                           we define security for access by using @Secured annotation
+                                                           and passing parameters as {("ROLE_ADMIN","ROLE_USER")} on it.
+     3)com.reactiveworks.learning.service.imp --->It contains the implementation classes for service interfaces.
+                                                  Here injecting the UserInfoDAO and ITicketDAO in these classes,
+                                                  which talks to database layer.
+                                                  It also contains UserDetailServiceImpl and TicketServiceImple which implements UserDetailsService Interface
+                                                  and overriding the method loadUserByUsername.
+     4)com.reactiveworks.learning.dao  --->Here defining the DAO Interface and abstract methods on it.
+                                           Note: Abstract method only defined in ITicketDAO since here methods are 
+                                           implemented using EntityManager interface.
+                                           While UserInfoDAO is extended to CRUDRepository.
+     5)com.reactiveworks.learning.dao.imp --->It only contains the implementation class TicketDAOImpl which is implementing
+                                              IticketDAO interface.It talks to database layer using EntityManager interface
+                                              and somewhere using HQL(Hibernate Query Language).
+     6)com.reactiveworks.learning.controller ---> There defining the controller classes both for TicketController and
+                                                  UserController.  
+     7)Next defining the security layer 
+       com.reactiveworks.learning.userinfo.security.config  ---> Here the security config is defining for User.
+                                                                 It contains two classes
+                                                                 (1)UserInfoAuthentificationEntryPoint ----> Entry point for Authentication for UserInfo and it extends BasicAuthenticationEntryPoint
+                                                                 (2)UserInfoSecurityConfig --->Here configuring the security for UserInfo based on the URL pattern and assigning the role on it, so that url pattern 
+                                                                                              can be access by role assignee.
+     8)Same way as mentioned in Point 7 security has also been configured for Ticket Entity
+       com.reactiveworks.learning.ticket.security.config
+       
+       
+                                       How It Works
+                                     ================
+1.First it will execute the SQL file which is in Resource Folder.
+  By it will create the following:
+  (i)Default Schema should have ticketsecuritydb in table.
+  (ii)create default table user_details under ticketsecuritydb schema
+  (iii)In that table it will automatically create as user "master" and password as "admin"
+       and role assigned to user as "ROLE_ADMIN".
+   
+   APIs
+   ======
+   UserInfo
+   -----------
+   1.Create User
+     URL: localhost:8080/admin/createuser
+     Body: {
+	    "userName":"chetan",
+		"password": "chetan@123",
+		"roleAssigned":"ROLE_USER"
+           }    
+     Method:POST      
+   Authentication: Basic
+                   Username: master    
+                   Password: admin
+                   *This is the default authentication*
+  2.Get All Users
+    URL: localhost:8080/admin/allusers
+    Authentication: Default 
+  
+  3.Delete User
+  URL: localhost:8080/admin/deletuser/{id} 
+  Method: DELETE
+  
+  4.Update User
+  URL:localhost:8080/admin/updateuser/{id}
+  METHOD: PUT
+  Body: {
+	    "userName":"chetan",
+		"password": "chetan@123",
+		"roleAssigned":"ROLE_USER"
+         }
+  Authentication: Default
+  
+  Ticket
+  --------
+  1.Get All Tickets
+  URL:localhost:8080/user/getalltickets
+  Method:POST   
+  Authentication: Default Or Created By UseInfo API
+  
+  2.Create New Ticket
+  URL:localhost:8080/user/createticket
+  Method: POST
+  Body:{
+	   "passengerName":"Chetan",
+	   "sourceStation":"Bangalore",
+	   "destination":"Mumbai",
+	   "dateOfJourney":"2017-11-25",
+	   "email":"mdnorshid254@gmail.com"
+       }
+  Authentication: Default Or Created By UseInfo API
+  
+  3.Get Ticket By Id
+  URL: localhost:8080/user/ticket/Chetan
+  Method: GET
+  Authentication: Default Or Created By UseInfo API
+  4.Delete Ticket By Id
+  URL: localhost:8080/user/deleteticket/{id}
+  Method: DELETE
+  Authentication: Default Or Created By UseInfo API
+  5.Update Ticket by Id 
+  URL: localhost:8080/user/updateticket/{userId}
+  Body:	{
+		"passengerName": "Md Noorshid",
+		"sourceStation": "Kampogoda Airport",
+		"destination": "Kolkata Airport",
+		"dateOfJourney": "2017-11-25",
+		"email": "mdnorshid254@gmail.com"
+	}
+  Method: PUT
+  Authentication: Default Or Created By UseInfo API
+  
+          
+                                                    
+        
+                                                                                           
+                                                                                                                                                                                       
