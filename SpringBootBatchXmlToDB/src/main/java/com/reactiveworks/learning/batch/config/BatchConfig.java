@@ -49,6 +49,11 @@ public class BatchConfig {
 		return new PersonItemProcessor();
 	}
 
+	/**
+	 * If we need to read information from an XML document, we can use the StaxEventItemReader<T> class.
+	 * The StaxEventItemReader<T> class transforms XML fragments into objects by using an Unmarshaller
+	 * @return
+	 */
 	@Bean
 	public StaxEventItemReader<Person> reader() {
 		StaxEventItemReader<Person> reader = new StaxEventItemReader<Person>();

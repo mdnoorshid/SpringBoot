@@ -42,6 +42,10 @@ public class BatchConfiguration {
     
     /**
      * Reading from DataBase
+     * If we want to read information from a database by using JDBC cursors,
+     * we have to use the JdbcCursorItemReader class.
+     * If we are using JDBC cursors, we can configure the fetch size by invoking the setFetchSize() method 
+     * of the AbstractCursorItemReader class.
      * @return
      */
     @Bean
@@ -79,15 +83,6 @@ public class BatchConfiguration {
         return writer;
     }
 
-    @Bean
-    public Job importUserJob(JobCompletionNotificationListener listener) {
-        return jobBuilderFactory.get("importUserJob")
-                .incrementer(new RunIdIncrementer())
-                .listener(listener)
-                .flow(step1())
-                .end()
-                .build();
-    }
 
     @Bean
     public Step step1() {

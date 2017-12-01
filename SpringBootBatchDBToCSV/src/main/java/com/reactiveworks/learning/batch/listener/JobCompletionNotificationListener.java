@@ -17,6 +17,11 @@ import org.springframework.stereotype.Component;
 
 import com.reactiveworks.learning.batch.model.Person;
 
+/**
+ * Job listener is Optional and provide the opportunity to execute some business logic before job start and after job completed.
+ * For example setting up environment can be done before job and cleanup can be done after job completed.
+ * @author Md Noorshid
+ */
 @Component
 public class JobCompletionNotificationListener extends JobExecutionListenerSupport {
 
